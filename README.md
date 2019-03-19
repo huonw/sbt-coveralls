@@ -126,6 +126,24 @@ To specify encoding, add the following to your `build.sbt`
 scalacOptions += Seq("-encoding", "UTF-8")
 ```
 
+## Uploading coverage from multiple jobs in parallel
+
+Coveralls supports multiple CI jobs recording and uploading coverage, if a special flag is set and [a webhook](https://docs.coveralls.io/parallel-build-webhook) is posted once all jobs are complete.
+
+### Put the flag directly in your `build.sbt`
+
+``` scala
+import org.scoverage.coveralls.Imports.CoverallsKeys._
+
+coverallsParallel := true
+```
+
+### Add an environment variable
+
+Add an environment variable `COVERALLS_PARALLEL`, for example:
+
+    export COVERALLS_PARALLEL=true
+
 ## Using Travis-Pro
 
 It is important to set the correct `service_name` when using Travis-Pro.  The default is to use `travis-ci`.  To override this value, add the following to your `build.sbt`
