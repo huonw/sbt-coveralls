@@ -69,6 +69,12 @@ object CoverallsPlugin extends AutoPlugin {
         """.stripMargin)
     }
 
+    if (coverallsParallel.value && travisJobNumber.isEmpty) {
+      sys.error(
+        "Could not find a service number for COVERALLS_PARALLEL=true, make sure the TRAVIS_JOB_NUMBER env variable is set"
+      )
+    }
+
     implicit val log = streams.value.log
 
     val sourcesEnc = sourceEncoding((scalacOptions in (Compile)).value)
@@ -84,6 +90,7 @@ object CoverallsPlugin extends AutoPlugin {
       coverallsFile.value,
       repoToken,
       travisJobIdent,
+      travisJobNumber,
       coverallsServiceName.value,
       coverallsParallel.value,
       new GitClient(repoRootDirectory)(log)
@@ -135,6 +142,8 @@ object CoverallsPlugin extends AutoPlugin {
   def apiHttpClient = new ScalaJHttpClient
 
   def travisJobIdent = sys.env.get("TRAVIS_JOB_ID")
+
+  def travisJobNumber = sys.env.get("TRAVIS_BUILD_NUMBER")
 
   def repoTokenFromFile(path: String) = {
     try {

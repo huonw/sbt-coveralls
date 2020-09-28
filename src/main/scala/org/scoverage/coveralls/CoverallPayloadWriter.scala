@@ -11,6 +11,7 @@ class CoverallPayloadWriter(
     coverallsFile: File,
     repoToken: Option[String],
     travisJobId: Option[String],
+    travisJobNumber: Option[String],
     serviceName: Option[String],
     parallel: Boolean,
     gitClient: GitClient) {
@@ -35,6 +36,7 @@ class CoverallPayloadWriter(
     writeOpt("repo_token", repoToken)
     writeOpt("service_name", serviceName)
     writeOpt("service_job_id", travisJobId)
+    writeOpt("service_job_number", travisJobNumber)
     writeOpt("service_pull_request", sys.env.get("CI_PULL_REQUEST"))
     gen.writeBooleanField("parallel", parallel)
 
